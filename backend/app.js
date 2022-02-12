@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const { celebrate, Joi, errors } = require('celebrate');
 const routes = require('./routes');
+const usersRout = require('./routes/users');
+const cardsRout = require('./routes/cards');
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const centralError = require('./middlewares/centralError');
@@ -13,6 +15,11 @@ const { validateUrl } = require('./method/validateUrl');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
+
+app.use(cookieParser());
+app.use(express.json());
+app.use(requestLogger); // логи запросов
+
 // const regular = '^[a-zA-Z0-9]{8,}$';
 app.get('/crash-test', () => {
   setTimeout(() => {
@@ -38,10 +45,8 @@ app.post('/signup', celebrate({
 }), createUser);
 
 app.use(auth);
-app.use(cookieParser());
-app.use(express.json());
-app.use(requestLogger); // логи запросов
-app.use(errorLogger);
+app.use('/users', usersRout);
+app.use('/cards', cardsRout);
 app.use(routes);
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
