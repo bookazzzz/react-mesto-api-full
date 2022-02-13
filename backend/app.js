@@ -10,12 +10,13 @@ const usersRout = require('./routes/users');
 const cardsRout = require('./routes/cards');
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
+const cors = require('./middlewares/cors');
 const centralError = require('./middlewares/centralError');
 const { validateUrl } = require('./method/validateUrl');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
-
+app.use(cors);
 app.use(cookieParser());
 app.use(express.json());
 app.use(requestLogger); // логи запросов
