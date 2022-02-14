@@ -5,18 +5,22 @@ const { PORT = 3000 } = process.env;
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const { celebrate, Joi, errors } = require('celebrate');
+// eslint-disable-next-line import/no-unresolved
+const cors = require('cors');
 const routes = require('./routes');
 const usersRout = require('./routes/users');
 const cardsRout = require('./routes/cards');
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
-const cors = require('./middlewares/cors');
 const centralError = require('./middlewares/centralError');
 const { validateUrl } = require('./method/validateUrl');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
-app.use(cors);
+app.use(cors({
+  origin: 'https://booka.nomoredomains.work/', // домен фронтенда
+  credentials: true,
+}));
 app.use(cookieParser());
 app.use(express.json());
 app.use(requestLogger); // логи запросов

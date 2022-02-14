@@ -11,7 +11,8 @@ class Api {
 //получение данных юзера
   getUserInfo() {
     return fetch(`${this._url}users/me`, {
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include'
     })
     .then(this._checkResponse)
   }
@@ -20,6 +21,7 @@ class Api {
     return fetch(`${this._url}users/me`, {
       method: 'PATCH',
       headers: this._headers,
+      credentials: 'include',
       body: JSON.stringify({
         name: data.name,
         about: data.about
@@ -32,6 +34,7 @@ class Api {
     return fetch(`${this._url}users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,
+      credentials: 'include',
       body: JSON.stringify({avatar: link.avatar})
     })
     .then(this._checkResponse)
@@ -40,7 +43,8 @@ class Api {
   getInitialCards() {
     return fetch(`${this._url}cards`, {
       method: 'GET',
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include'
     })
     .then(this._checkResponse)
   }
@@ -49,6 +53,7 @@ class Api {
     return fetch(`${this._url}cards`, {
       method: 'POST',
       headers: this._headers,
+      credentials: 'include',
       body: JSON.stringify({
         name: data.name,
         link: data.link
@@ -60,7 +65,8 @@ class Api {
   deletePlaceCard(id) {
     return fetch(`${this._url}cards/${id}`, {
       method: 'DELETE',
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include'
     })
     .then(this._checkResponse)
   }
@@ -74,6 +80,7 @@ _set(query, method) {
   return fetch(`${this._url}${query}`, {
     method,
     headers: this._headers,
+    credentials: 'include'
   })
     .then(res => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`))
 }
@@ -87,7 +94,7 @@ _checkResponse(res) {
 }
 
 const api = new Api ({
-  url: 'https://mesto.nomoreparties.co/v1/cohort-29/',
+  url: 'https://bookaback.nomoredomains.work',
   headers: {
   authorization: 'f0580056-984e-4f07-9580-70b86980b58c',
   'Content-Type': 'application/json'
