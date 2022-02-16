@@ -118,12 +118,12 @@ const login = (req, res, next) => {
   User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        next(new UnauthorizedError('передан неверный логин или пароль.'));
+        return next(new UnauthorizedError('передан неверный логин или пароль.'));
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            next(new UnauthorizedError('передан неверный логин или пароль.'));
+            return next(new UnauthorizedError('передан неверный логин или пароль.'));
           }
 
           const { NODE_ENV, JWT_SECRET } = process.env;
@@ -152,6 +152,20 @@ const login = (req, res, next) => {
     });
 };
 
+const getCurrentUser = (req, res, next) => User.findById(req.user._id)
+  .orFail(() => {
+    throw new NotFoundError('Пользователь не найден');
+  })
+  .then((user) => res.status(200).send({ user }))
+  .catch((err) => {
+    if (err.name === 'CastError') {
+      throw new BadRequest('Переданы некорректные данные');
+    } else if (err.name === 'NotFoundError') {
+      throw new NotFoundError('Пользователь не найден');
+    }
+  })
+  .catch(next);
+
 module.exports = {
   getUsers,
   getUser,
@@ -159,4 +173,5 @@ module.exports = {
   updateUser,
   updateUserAvatar,
   login,
+  getCurrentUser,
 };

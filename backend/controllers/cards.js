@@ -2,6 +2,7 @@ const Card = require('../models/card');
 
 const BadRequest = require('../errors/BadRequest');
 const NotFoundError = require('../errors/pageNotFoundError');
+const ForbiddenError = require('../errors/forbiddenError');
 
 // Получаем все карточки с сервера
 const getCards = (req, res, next) => {
@@ -41,7 +42,7 @@ const likeCard = (req, res, next) => {
     .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.message === 'NotFound') {
-        next(new NotFoundError('Запрашиваемый адрес не найден'));
+        next(new NotFoundError('Нет карточки по указанным id'));
       } else if (err.name === 'CastError') {
         next(new BadRequest('Oops не можем поставить лайк - ошибка 400'));
       } else {
@@ -52,16 +53,17 @@ const likeCard = (req, res, next) => {
 
 // Удаляем карточку
 const deleteCard = (req, res, next) => {
-  Card.findByIdAndRemove(req.params.id)
-    .orFail(() => { throw new NotFoundError('Запрашиваемый адрес не найден'); })
-    .then((card) => res.status(200).send(card))
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequest('Oops не можем удалить карточку - ошибка 400'));
-      } else {
-        next(err);
+  const { id } = req.params;
+  Card.findByIdAndRemove(id)
+    .orFail(() => { throw new NotFoundError('Нет карточки по указанным id'); })
+    .then((card) => {
+      if (!card.owner.equals(req.user._id)) {
+        return next(new ForbiddenError('Нельзя удалить чужую карточку'));
       }
-    });
+      return card.remove()
+        .then(() => res.send({ message: 'Карточка удалена' }));
+    })
+    .catch(next);
 };
 
 // Удаяем лайк
@@ -71,7 +73,7 @@ const dislikeCard = (req, res, next) => {
     .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.message === 'NotFound') {
-        next(new NotFoundError('Запрашиваемый адрес не найден'));
+        next(new NotFoundError('Нет карточки по указанным id'));
       } else if (err.name === 'CastError') {
         next(new BadRequest('Oops не можем удалить лайк - ошибка 400'));
       } else {

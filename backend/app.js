@@ -25,7 +25,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(requestLogger); // логи запросов
 
-// const regular = '^[a-zA-Z0-9]{8,}$';
 app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error('Сервер сейчас упадёт');

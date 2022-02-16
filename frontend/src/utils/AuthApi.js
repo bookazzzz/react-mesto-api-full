@@ -1,4 +1,3 @@
-// const baseUrl = 'https://auth.nomoreparties.co';
 const baseUrl = 'https://bookaback.nomoredomains.work';
 
 class AuthApi {
