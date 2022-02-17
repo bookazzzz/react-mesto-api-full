@@ -3,6 +3,10 @@ const allowedCors = [
   'http://localhost:3001',
   'http://booka.nomoredomains.work',
   'https://booka.nomoredomains.work',
+  'https://bookaback.nomoredomains.work',
+  'http://bookaback.nomoredomains.work',
+  'http://localhost:8080',
+  'https://localhost:8080',
 ];
 
 const cors = (req, res, next) => {
