@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const { celebrate, Joi, errors } = require('celebrate');
 // eslint-disable-next-line import/no-unresolved
-const cors = require('cors');
+// const cors = require('cors');
+const cors = require('./middlewares/cors');
 const routes = require('./routes');
 const usersRout = require('./routes/users');
 const cardsRout = require('./routes/cards');
@@ -24,7 +25,6 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 app.use(requestLogger); // логи запросов
-
 app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error('Сервер сейчас упадёт');
