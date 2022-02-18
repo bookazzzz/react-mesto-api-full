@@ -162,10 +162,10 @@ const getCurrentUser = (req, res, next) => User.findById(req.user._id)
       throw new BadRequest('Переданы некорректные данные');
     } else if (err.name === 'NotFoundError') {
       throw new NotFoundError('Пользователь не найден');
+    } else {
+      next(err);
     }
-  })
-  .catch(next);
-
+  });
 module.exports = {
   getUsers,
   getUser,
