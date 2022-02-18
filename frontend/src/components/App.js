@@ -196,15 +196,10 @@ function handleUpdateAvatar(data) {
     //функция входа
     function handleLogin({email, password}){
       apiAuth
-          .authorization({email, password})
-          .then(data => {
-              if(data.token) {
-                  const token = data.token;
-                  localStorage.setItem('jwt', token);
-                  tokenCheck();
-                  setLoggedIn(true);
-              }
-          })
+      .authorization({email, password})
+      .then(() => {
+        setLoggedIn(true);
+      })
           .catch(err => {
               console.log(err);
           })
