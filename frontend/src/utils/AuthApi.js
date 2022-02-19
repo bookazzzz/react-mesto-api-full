@@ -21,6 +21,7 @@ class AuthApi {
     authorization ({email, password}) {
         return fetch(this.url +'/signin', {
             method: 'POST',
+            credentials: 'include',
             headers: {'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
@@ -33,6 +34,7 @@ class AuthApi {
     getContent (token) {
         return fetch(this.url + '/users/me', {
             method: 'GET',
+            credentials: 'include',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
