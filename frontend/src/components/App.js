@@ -82,11 +82,12 @@ function App() {
     setIsInfoTooltipOpened(false); 
   }
 // Хук для получения данных юзера
-  React.useEffect(() => {
-    api.getUserInfo()
-      .then((res) => setCurrentUser(res))
-      .catch((err) => console.log(err));
-  }, [])
+  // React.useEffect(() => {
+  //   api.getUserInfo()
+  //     .then((res) => setCurrentUser(res))
+  //     .catch((err) => console.log(err));
+  // }, [])
+
 // Функция для обновления данных юзера
   function handleUpdateUser(data) {
     api.editUserInfo(data)
@@ -106,16 +107,37 @@ function handleUpdateAvatar(data) {
     .catch((err) => console.log(err))
 }
 
+React.useEffect(() => {
+  if (loggedIn) {
+    api.getUserInfo().then(res => {
+        setCurrentUser(res);
+    })
+    .catch(err => {
+        console.log (`Не загрузились данные профиля: ${err}`)
+    })
+  }
+}, [loggedIn])
+
+React.useEffect(() => {
+  if (loggedIn) {
+    api.getInitialCards().then(res => {
+      setCards(res);
+    })
+    .catch(err => {
+        console.log (`Не загрузились данные карточек: ${err}`)
+    })
+  }
+}, [loggedIn])
 
 // Хук для загрузки карточек
-  React.useEffect (() => {
-    api
-      .getInitialCards()
-      .then((res) => {
-        setCards(res)
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  // React.useEffect (() => {
+  //   api
+  //     .getInitialCards()
+  //     .then((res) => {
+  //       setCards(res)
+  //     })
+  //     .catch((err) => console.log(err));
+  // }, []);
 // Функция для добавления карточки
   function handleAddPlaceSubmit(data) {
     api.addPlaceCard(data)
@@ -212,34 +234,58 @@ function handleUpdateAvatar(data) {
 
 }, [loggedIn]);
 //Проверяем токен после каждого обновления
-React.useEffect(() => {
-  tokenCheck();
-}, []);
+// React.useEffect(() => {
+//   tokenCheck();
+// }, []);
 
 
-//Проверяю токен
-  function tokenCheck() {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt){
-        apiAuth
-            .getContent(jwt)
-            .then((data) => {
-            if (data){
-                setIsUserEmail(data.data.email);
-                setLoggedIn(true);
-            }
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }
-  }
+// Проверяю токен
+  // function tokenCheck() {
+  //   const jwt = localStorage.getItem('jwt');
+  //   if (jwt){
+  //       apiAuth
+  //           .getContent(jwt)
+  //           .then((data) => {
+  //           if (data){
+  //               setIsUserEmail(data.data.email);
+  //               setLoggedIn(true);
+  //           }
+  //           })
+  //           .catch(err => {
+  //               console.log(err);
+  //           })
+  //   }
+  // }
+
  //функция выхода
  function signOut(){
-  localStorage.removeItem('jwt');
+  // localStorage.removeItem('jwt');
   setLoggedIn(false);
   history.push('/sign-in');
 }
+
+//Проверка авторизован или нет
+
+// React.useEffect(() => {
+//   api
+//     .getUserInfo()
+//     .then(() => {
+//       setLoggedIn(true);
+//     });
+// }, []);
+
+// React.useEffect(() => {
+//   if (loggedIn) {
+//     api.getAppInfo()
+//     .then(([data, cards]) => {
+//       setCurrentUser(data);
+//       setCards(cards);
+//     })
+//     .catch(err => console.log(`Ошибка инициализации данных: ${err}`));
+//   }
+// }, [loggedIn]);
+
+
 
 
   return (

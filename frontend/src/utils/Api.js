@@ -96,7 +96,7 @@ _checkResponse(res) {
 const api = new Api ({
   url: 'https://bookaback.nomoredomains.work/',
   headers: {
-  authorization: 'f0580056-984e-4f07-9580-70b86980b58c',
+  // authorization: 'f0580056-984e-4f07-9580-70b86980b58c',
   'Content-Type': 'application/json'
   }
 })
