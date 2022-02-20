@@ -6,8 +6,8 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const { celebrate, Joi, errors } = require('celebrate');
 // eslint-disable-next-line import/no-unresolved
-const cors = require('cors');
-// const cors = require('./middlewares/cors');
+// const cors = require('cors');
+const cors = require('./middlewares/cors');
 const routes = require('./routes');
 const usersRout = require('./routes/users');
 const cardsRout = require('./routes/cards');
@@ -18,11 +18,11 @@ const { validateUrl } = require('./method/validateUrl');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
-app.use(cors({
-  origin: 'https://booka.nomoredomains.work/', // домен фронтенда
-  credentials: true,
-}));
-// app.use(cors);
+// app.use(cors({
+//   origin: 'https://booka.nomoredomains.work/', // домен фронтенда
+//   credentials: true,
+// }));
+app.use(cors);
 app.use(cookieParser());
 app.use(express.json());
 app.use(requestLogger); // логи запросов

@@ -28,7 +28,6 @@ class Api {
         Authorization: `Bearer ${this._token}`,
         "Content-Type": "application/json",
       },
-      credentials: "include",
       body: JSON.stringify({
         name: data.name,
         about: data.about,
@@ -44,7 +43,6 @@ class Api {
         Authorization: `Bearer ${this._token}`,
         "Content-Type": "application/json",
       },
-      credentials: "include",
       body: JSON.stringify({ avatar: link.avatar }),
     }).then(this._checkResponse);
   }
