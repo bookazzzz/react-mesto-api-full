@@ -22,7 +22,7 @@ const app = express();
 //   origin: 'https://booka.nomoredomains.work/', // домен фронтенда
 //   credentials: true,
 // }));
-app.use(cors);
+app.use('*', cors());
 app.use(cookieParser());
 app.use(express.json());
 app.use(requestLogger); // логи запросов
