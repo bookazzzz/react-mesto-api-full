@@ -7,7 +7,6 @@ const ForbiddenError = require('../errors/forbiddenError');
 // Получаем все карточки с сервера
 const getCards = (req, res, next) => {
   Card.find({})
-    .populate('owner')
     .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {

@@ -7,6 +7,8 @@ const UnauthorizedError = require('../errors/unauthorizedError');
 const NotFoundError = require('../errors/pageNotFoundError');
 const ConflictError = require('../errors/ConflictError');
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 // Получаем всех пользователей
 const getUsers = async (req, res, next) => {
   try {
@@ -53,14 +55,11 @@ const createUser = (req, res, next) => {
       email,
       password: hash,
     }))
-    .then(() => res.send({
-      data: {
-        name,
-        about,
-        avatar,
-        email,
-      },
-    }))
+    .then((user) => {
+      const data = JSON.parse(JSON.stringify(user));
+      delete data.password;
+      res.status(200).send({ data });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequest(`Произошла ошибка: ${err} Переданы некорректные данные при создании пользователя`));
@@ -126,21 +125,12 @@ const login = (req, res, next) => {
             return next(new UnauthorizedError('передан неверный логин или пароль.'));
           }
 
-          const { NODE_ENV, JWT_SECRET } = process.env;
-
           const token = jwt.sign(
             { _id: user._id },
             NODE_ENV === 'production' ? JWT_SECRET : 'secret-key',
             { expiresIn: '7d' },
           );
-          return res
-            .cookie('jwt', token, {
-              maxAge: 3600000 * 24 * 7,
-              secure: true,
-              httpOnly: true,
-              sameSite: false,
-            })
-            .send({ message: 'Вход совершен успешно' });
+          return res.send({ token });
         });
     })
     .catch((err) => {

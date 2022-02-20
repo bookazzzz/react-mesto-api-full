@@ -1,104 +1,116 @@
 class Api {
-  constructor({url, headers}) {
+  constructor({ url }) {
     this._url = url;
-    this._headers = headers;
   }
 
-  getAppInfo() {
-    return Promise.all([this.getUserInfo(), this.getInitialCards()])
-}
+  getAppInfo(token) {
+    this._token = token;
 
-//получение данных юзера
+    return Promise.all([this.getUserInfo(), this.getInitialCards()]);
+  }
+
+  //получение данных юзера
   getUserInfo() {
     return fetch(`${this._url}users/me`, {
-      headers: this._headers,
-      credentials: 'include'
-    })
-    .then(this._checkResponse)
+      headers: {
+        Authorization: `Bearer ${this._token}`,
+        "Content-Type": "application/json",
+      },
+    }).then(this._checkResponse);
   }
-//редактирование данных юзера
+  //редактирование данных юзера
   editUserInfo(data) {
     return fetch(`${this._url}users/me`, {
-      method: 'PATCH',
-      headers: this._headers,
-      credentials: 'include',
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${this._token}`,
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
       body: JSON.stringify({
         name: data.name,
-        about: data.about
-      })
-    })
-    .then(this._checkResponse)
+        about: data.about,
+      }),
+    }).then(this._checkResponse);
   }
-//редактирование аватара
+  //редактирование аватара
   editAvatar(link) {
     return fetch(`${this._url}users/me/avatar`, {
-      method: 'PATCH',
-      headers: this._headers,
-      credentials: 'include',
-      body: JSON.stringify({avatar: link.avatar})
-    })
-    .then(this._checkResponse)
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${this._token}`,
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ avatar: link.avatar }),
+    }).then(this._checkResponse);
   }
-//Отрисовка начальных карточек
+  //Отрисовка начальных карточек
   getInitialCards() {
     return fetch(`${this._url}cards`, {
-      method: 'GET',
-      headers: this._headers,
-      credentials: 'include'
-    })
-    .then(this._checkResponse)
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${this._token}`,
+        "Content-Type": "application/json",
+      },
+    }).then(this._checkResponse);
   }
-//добавление карточки
+  //добавление карточки
   addPlaceCard(data) {
     return fetch(`${this._url}cards`, {
-      method: 'POST',
-      headers: this._headers,
-      credentials: 'include',
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this._token}`,
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
       body: JSON.stringify({
         name: data.name,
-        link: data.link
-      })
-    })
-    .then(this._checkResponse)
+        link: data.link,
+      }),
+    }).then(this._checkResponse);
   }
-//удаление карточки
+  //удаление карточки
   deletePlaceCard(id) {
     return fetch(`${this._url}cards/${id}`, {
-      method: 'DELETE',
-      headers: this._headers,
-      credentials: 'include'
-    })
-    .then(this._checkResponse)
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${this._token}`,
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }).then(this._checkResponse);
   }
 
-//добавление и удаление лайка
-updateCardLike(id, liked) {
-  return this._set(`cards/likes/${id}`, liked ? 'PUT' : 'DELETE')
-}
+  //добавление и удаление лайка
+  updateCardLike(id, liked) {
+    return this._set(`cards/likes/${id}`, liked ? "PUT" : "DELETE");
+  }
 
-_set(query, method) {
-  return fetch(`${this._url}${query}`, {
-    method,
-    headers: this._headers,
-    credentials: 'include'
-  })
-    .then(res => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`))
-}
+  _set(query, method) {
+    return fetch(`${this._url}${query}`, {
+      method,
+      headers: {
+        Authorization: `Bearer ${this._token}`,
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }).then((res) =>
+      res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
+    );
+  }
 
-_checkResponse(res) {
+  _checkResponse(res) {
     if (res.ok) {
       return res.json();
     }
     return Promise.reject(`Ошибка: ${res.status}`);
-   }
+  }
 }
 
-const api = new Api ({
-  url: 'https://bookaback.nomoredomains.work/',
-  headers: {
-  // authorization: 'f0580056-984e-4f07-9580-70b86980b58c',
-  'Content-Type': 'application/json'
-  }
-})
+const api = new Api({
+  url: "https://bookaback.nomoredomains.work/"
+  // url: "http://localhost:3001/"
+});
 
 export default api;
