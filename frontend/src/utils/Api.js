@@ -86,7 +86,7 @@ class Api {
 
   //добавление и удаление лайка
   updateCardLike(id, liked) {
-    return this._set(`cards/likes/${id}`, liked ? "PUT" : "DELETE");
+    return this._set(`cards/${id}/likes`, liked ? "PUT" : "DELETE");
   }
 
   _set(query, method) {
