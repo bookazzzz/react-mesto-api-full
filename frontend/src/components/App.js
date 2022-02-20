@@ -110,6 +110,7 @@ function handleUpdateAvatar(data) {
 React.useEffect(() => {
   if (loggedIn) {
     api.getUserInfo().then(res => {
+      debugger
         setCurrentUser(res);
     })
     .catch(err => {
@@ -121,6 +122,7 @@ React.useEffect(() => {
 React.useEffect(() => {
   if (loggedIn) {
     api.getInitialCards().then(res => {
+      debugger
       setCards(res);
     })
     .catch(err => {
