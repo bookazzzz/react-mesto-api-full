@@ -12,6 +12,7 @@ class Api {
   //получение данных юзера
   getUserInfo() {
     return fetch(`${this._url}users/me`, {
+      credentials: 'include',
       headers: {
         Authorization: `Bearer ${this._token}`,
         "Content-Type": "application/json",
@@ -22,6 +23,7 @@ class Api {
   editUserInfo(data) {
     return fetch(`${this._url}users/me`, {
       method: "PATCH",
+      credentials: 'include',
       headers: {
         Authorization: `Bearer ${this._token}`,
         "Content-Type": "application/json",
@@ -37,6 +39,7 @@ class Api {
   editAvatar(link) {
     return fetch(`${this._url}users/me/avatar`, {
       method: "PATCH",
+      credentials: 'include',
       headers: {
         Authorization: `Bearer ${this._token}`,
         "Content-Type": "application/json",
@@ -49,6 +52,7 @@ class Api {
   getInitialCards() {
     return fetch(`${this._url}cards`, {
       method: "GET",
+      credentials: 'include',
       headers: {
         Authorization: `Bearer ${this._token}`,
         "Content-Type": "application/json",
