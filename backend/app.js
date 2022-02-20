@@ -19,10 +19,23 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
 app.use(cors({
-  origin: 'https://booka.nomoredomains.work/',
-  host: '51.250.8.193', // домен фронтенда
+  origin: [
+    'http://localhost:3000',
+    'http://booka.nomoredomains.work',
+    'https://booka.nomoredomains.work',
+    'http://bookaback.nomoredomains.work',
+    'https://bookaback.nomoredomains.work',
+  ],
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'origin', 'Authorization'],
   credentials: true,
 }));
+// app.use(cors({
+//   origin: 'https://booka.nomoredomains.work/',
+//   credentials: true,
+// }));
 // app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
