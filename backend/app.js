@@ -18,11 +18,11 @@ const { validateUrl } = require('./method/validateUrl');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
-// app.use(cors({
-//   origin: 'https://booka.nomoredomains.work/', // домен фронтенда
-//   credentials: true,
-// }));
-app.use(cors());
+app.use(cors({
+  origin: 'https://booka.nomoredomains.work/', // домен фронтенда
+  credentials: true,
+}));
+// app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 app.use(requestLogger); // логи запросов
