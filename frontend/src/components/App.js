@@ -183,7 +183,7 @@ function App() {
   function handleRegister({ email, password }) {
     apiAuth
       .register({ email, password })
-      .then((response) => {
+      .then((res) => {
         handleInfoTooltipOpen();
       })
       .catch((err) => {
